@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """Download and plot confirmed Covid-19 cases from UK government data."""
 
 import subprocess as sp
@@ -154,7 +156,7 @@ def plot_devon():
     bottom = 0
     for location, color, zorder in zip(locations, colors, range(4)[::-1]):
         if location == 'Devon':
-            label = 'Devon UTLH'
+            label = 'Devon UTLA'
         else:
             label = location
         num_cases = location_values.get(location)
@@ -187,7 +189,7 @@ def main(save=False):
     INPUT
 
     save:  bool
-           If true, saves each figure to a png file, otherwise displays all
+           If True, saves each figure to a png file, otherwise displays all
            figures in matplotlib gui.
     """
     update_csv()
