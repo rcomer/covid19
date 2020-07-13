@@ -194,7 +194,7 @@ def main(save=False):
     """
     update_csv()
     for loc in ['South West', 'West Berkshire', 'Leicester', 'Essex',
-                'Basildon']:
+                'Basildon', 'Dorset', 'Somerset']:
         plt.figure(figsize=FIG_SIZE)
         plot_values(loc)
         if save:
