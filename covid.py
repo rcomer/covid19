@@ -33,8 +33,8 @@ def csv_time():
 
 def update_csv():
     """
-    If local copy of data file is more than a day old, download it again from
-    government website.
+    If local copy of data file is more than a day old or does not exist,
+    download it from government website.
     """
     current_datetime = datetime.datetime.now()
     
