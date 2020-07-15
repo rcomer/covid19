@@ -37,14 +37,14 @@ def update_csv():
     download it from government website.
     """
     current_datetime = datetime.datetime.now()
-    
+
     if os.path.isfile(FNAME):
         modified_datetime = csv_time()
         if (current_datetime - modified_datetime).days == 0:
             return
-    
+
         os.remove(FNAME)
-        
+
     command = "wget {}".format(URL + FNAME)
     sp.call(command, shell=True)
 
