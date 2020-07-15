@@ -19,6 +19,7 @@ BIDAILY_LOCATOR = mdates.DayLocator(interval=2)
 DATE_FORMATTER = mdates.DateFormatter('%b%d')
 
 FIG_SIZE = (10, 6)
+plt.rcParams['hatch.color'] = 'white'
 
 
 def csv_time():
@@ -101,21 +102,19 @@ def format_axes():
     xaxis.set_minor_locator(BIDAILY_LOCATOR)
 
 
-def add_5day_box():
+def mod_last_5days(dates, bars):
     """
     Government about the data page suggests that data more than 5 days old may
-    be considered complete.  This function adds shading to the most recent 5
+    be considered complete.  This function adds hatching to the most recent 5
     days to indicate possible incompleteness.
     https://coronavirus.data.gov.uk/about#cases-over-time
     """
     data_file_datetime = csv_time()
-    end_valid_datetime = data_file_datetime - datetime.timedelta(days=1)
+    last_complete_datetime = data_file_datetime - datetime.timedelta(days=6)
 
-    # Bars are all centred on midnight, so use noon to fit shading around them.
-    end_valid_datetime.replace(hour=12, minute=0)
-    start_valid_datetime = end_valid_datetime - datetime.timedelta(days=5)
-    plt.axvspan(start_valid_datetime, end_valid_datetime, color='lavender',
-                zorder=-10)
+    for date, bar in zip(dates, bars):
+        if date > last_complete_datetime:
+            bar.set_hatch('///')
 
 
 def plot_values(location):
@@ -123,10 +122,10 @@ def plot_values(location):
     Make a bar chart of confirmed cases by date for the given location.
     """
     dates, num_cases, kind = get_values(location)
-    plt.bar(dates, num_cases)
+    bars = plt.bar(dates, num_cases)
     plt.title('Confirmed Cases in {} {}'.format(location, kind_label(kind)))
     format_axes()
-    add_5day_box()
+    mod_last_5days(dates, bars)
 
 
 def plot_devon():
@@ -164,8 +163,9 @@ def plot_devon():
         else:
             label = location
         num_cases = location_values.get(location)
-        plt.bar(all_dates, num_cases, bottom=bottom, label=label,
-                color=color, zorder=zorder)
+        bars = plt.bar(all_dates, num_cases, bottom=bottom, label=label,
+                       color=color, zorder=zorder)
+        mod_last_5days(all_dates, bars)
 
         if location != 'Exeter':
             bottom = num_cases + bottom
@@ -173,7 +173,6 @@ def plot_devon():
     format_axes()
     plt.legend()
     plt.title('Confirmed Cases in Devon')
-    add_5day_box()
 
 
 def save_fig(location):
