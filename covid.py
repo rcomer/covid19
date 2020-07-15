@@ -36,13 +36,17 @@ def update_csv():
     If local copy of data file is more than a day old, download it again from
     government website.
     """
-    modified_datetime = csv_time()
     current_datetime = datetime.datetime.now()
-    if (current_datetime - modified_datetime).days > 0:
-        fname = URL + FNAME
+    
+    if os.path.isfile(FNAME):
+        modified_datetime = csv_time()
+        if (current_datetime - modified_datetime).days == 0:
+            return
+    
         os.remove(FNAME)
-        command = "wget {}".format(fname)
-        sp.call(command, shell=True)
+        
+    command = "wget {}".format(URL + FNAME)
+    sp.call(command, shell=True)
 
 
 def get_values(location):
