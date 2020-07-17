@@ -96,6 +96,7 @@ def format_axes():
     Update current axes with gridlines, ticklabels, etc.
     """
     plt.grid(axis='y', linestyle='--')
+    plt.xlim(right=csv_time().date())
     xaxis = plt.gca().get_xaxis()
     xaxis.set_major_locator(BIWEEKLY_LOCATOR)
     xaxis.set_major_formatter(DATE_FORMATTER)
