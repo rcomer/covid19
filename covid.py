@@ -21,6 +21,10 @@ DATE_FORMATTER = mdates.DateFormatter('%b%d')
 FIG_SIZE = (10, 6)
 plt.rcParams['hatch.color'] = 'white'
 
+# Date controlling start of x-axis (all available data are plotted if this is
+# None).
+XAXIS_START = datetime.date(2020, 4, 1)
+
 
 def csv_time():
     """
@@ -96,7 +100,7 @@ def format_axes():
     Update current axes with gridlines, ticklabels, etc.
     """
     plt.grid(axis='y', linestyle='--')
-    plt.xlim(right=csv_time().date())
+    plt.xlim(right=csv_time().date(), left=XAXIS_START)
     xaxis = plt.gca().get_xaxis()
     xaxis.set_major_locator(BIWEEKLY_LOCATOR)
     xaxis.set_major_formatter(DATE_FORMATTER)
