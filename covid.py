@@ -74,6 +74,7 @@ def get_values(location):
     num_cases = []
     with open(FNAME) as fp:
         for line in fp:
+            line = line.replace('"Bristol, City of"', 'City of Bristol')
             parts = line.split(',')
             if parts[0].strip() == location and parts[3] not in date_strings:
                 date_strings.append(parts[3])
@@ -81,6 +82,9 @@ def get_values(location):
                 kind = parts[2]
 
     dates = [datetime.datetime.strptime(dt, '%Y-%m-%d') for dt in date_strings]
+
+    if not date_strings:
+        raise ValueError('No data found for {}.'.format(location))
 
     return dates, num_cases, kind
 
@@ -202,7 +206,9 @@ def main(save=False):
     """
     update_csv()
     for loc in ['South West', 'West Berkshire', 'Leicester', 'Essex',
-                'Basildon', 'Dorset', 'Somerset']:
+                'Basildon', 'Dorset', 'Somerset', 'Gloucestershire',
+                'Wiltshire', 'City of Bristol', 'Cornwall and Isles of Scilly',
+                'Bath and North East Somerset']:
         plt.figure(figsize=FIG_SIZE)
         plot_values(loc)
         if save:
